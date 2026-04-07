@@ -136,7 +136,6 @@ const AddBookForm = () => {
                                 placeholder="1991" 
                                 className='h-12 text-base!'
                                 min={1000}
-                                max={new Date().getFullYear()}
                              />
                         </div>
 

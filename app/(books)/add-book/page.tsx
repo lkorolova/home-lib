@@ -1,4 +1,3 @@
-// 'use client'
 import AddBookForm from '@/components/add-book/AddBookForm'
 
 const AddBook = () => {
