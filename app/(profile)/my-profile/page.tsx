@@ -1,13 +1,13 @@
 import { auth } from '@/app/(auth)/auth';
 import { getUserById } from '@/lib/db/queries';
 import MyProfileForm from '@/components/profile/MyProfileForm';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 const MyProfilePage = async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
-    notFound();
+    redirect('/');
   }
 
   const [currentUser] = await getUserById(session.user.id);

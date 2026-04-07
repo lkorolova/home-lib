@@ -1,13 +1,13 @@
 import { auth } from '@/app/(auth)/auth';
 import BookCard from '@/components/add-book/BookCard';
 import { fetchUserLibraryBooks } from '@/lib/db/queries';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 const Library = async () => {
   const session = await auth();
 
   if (!session?.user?.id) {
-    notFound();
+    redirect('/');
   }
 
   const books = await fetchUserLibraryBooks(session.user.id);

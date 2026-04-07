@@ -1,7 +1,11 @@
 import { fetchRecentBooks } from '@/lib/db/queries';
 import BookCard from '../add-book/BookCard';
+import { cacheLife } from 'next/cache';
 
 const BookList = async () => {
+  'use cache';
+  cacheLife('minutes');
+  
   const books = await fetchRecentBooks();
 
   return (
