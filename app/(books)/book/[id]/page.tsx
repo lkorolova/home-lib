@@ -1,7 +1,7 @@
 import { getBookById } from '@/app/(books)/actions';
 import ManageLibraryButton from '@/components/book/ManageLibraryButton';
 import { Badge } from '@/components/ui/badge';
-import { unstable_cache } from 'next/cache';
+import { cacheLife } from 'next/cache';
 import { Calendar, Hash, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,19 +12,18 @@ interface BookDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
-const getCachedBookById = unstable_cache(
-  async (id: string) => {
-    const result = await getBookById(id);
+async function getCachedBookById(id: string) {
+  'use cache';
+  cacheLife('days');
 
-    if (result.status !== 'success' || !result.book) {
-      return null;
-    }
+  const result = await getBookById(id);
 
-    return result.book;
-  },
-  ['book-details-by-id'],
-  { revalidate: 300 }
-);
+  if (result.status !== 'success' || !result.book) {
+    return null;
+  }
+
+  return result.book;
+}
 
 const BookDetailsSkeleton = () => (
   <section className='mt-4 grid gap-8 lg:grid-cols-[360px_1fr] animate-pulse'>
