@@ -1,10 +1,14 @@
+import 'server-only';
+
 import { compare } from "bcrypt-ts";
 import NextAuth, { type DefaultSession } from "next-auth";
 import type { DefaultJWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
-import { DUMMY_PASSWORD } from "@/lib/constants";
+import { generateDummyPassword } from "@/lib/db/utils";
 import { createGuestUser, getUser } from "@/lib/db/queries";
 import { authConfig } from "./auth.config";
+
+const DUMMY_PASSWORD = generateDummyPassword();
 
 export type UserType = "guest" | "regular";
 
@@ -93,8 +97,8 @@ export const {
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id;
-        session.user.type = token.type;
+        session.user.id = token.id as string;
+        session.user.type = token.type as UserType;
       }
 
       return session;

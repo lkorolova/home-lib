@@ -1,5 +1,7 @@
 import { getBookById } from '@/app/(books)/actions';
+import ManageLibraryButton from '@/components/book/ManageLibraryButton';
 import { Badge } from '@/components/ui/badge';
+import { unstable_cache } from 'next/cache';
 import { Calendar, Hash, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,6 +11,20 @@ import { Suspense } from 'react';
 interface BookDetailsPageProps {
   params: Promise<{ id: string }>;
 }
+
+const getCachedBookById = unstable_cache(
+  async (id: string) => {
+    const result = await getBookById(id);
+
+    if (result.status !== 'success' || !result.book) {
+      return null;
+    }
+
+    return result.book;
+  },
+  ['book-details-by-id'],
+  { revalidate: 300 }
+);
 
 const BookDetailsSkeleton = () => (
   <section className='mt-4 grid gap-8 lg:grid-cols-[360px_1fr] animate-pulse'>
@@ -39,13 +55,13 @@ const BookDetailsSkeleton = () => (
 );
 
 const BookDetails = async ({ id }: { id: string }) => {
-  const result = await getBookById(id);
+  const book = await getCachedBookById(id);
 
-  if (result.status !== 'success' || !result.book) {
+  if (!book) {
     notFound();
   }
 
-  const { title, author, coverUrl, description, genre, publicationYear, isbn, createdAt } = result.book;
+  const { title, author, coverUrl, description, genre, publicationYear, isbn } = book;
 
   return (
     <section className='mt-4 grid gap-8 lg:grid-cols-[360px_1fr]'>
@@ -67,6 +83,8 @@ const BookDetails = async ({ id }: { id: string }) => {
 
         <p className='leading-7 text-foreground/90'>{description}</p>
 
+        <ManageLibraryButton bookId={id} />
+
         <div className='grid gap-3 sm:grid-cols-2'>
           <div className='rounded-sm border bg-white p-4'>
             <p className='flex items-center gap-2 text-sm text-muted-foreground'>
@@ -84,10 +102,6 @@ const BookDetails = async ({ id }: { id: string }) => {
             <p className='mt-1 text-base font-semibold'>{isbn}</p>
           </div>
         </div>
-
-        <p className='text-sm text-muted-foreground'>
-          Added on {new Date(createdAt).toLocaleDateString()}
-        </p>
       </div>
     </section>
   );

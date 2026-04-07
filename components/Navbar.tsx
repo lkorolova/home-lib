@@ -41,11 +41,13 @@ const Navbar = () => {
                                 <Plus className='w-4 h-4'/>
                                 <span className='hidden sm:inline'>Add Book</span></Link>
                         </Button>
-                        <Button variant={isActive('/library') ? 'default' : 'ghost'} size='sm' asChild>
-                            <Link href='/library' className='gap-2' >
-                                <Library className='w-4 h-4'/>
-                                <span className='hidden sm:inline'>Library</span></Link>
-                        </Button>
+                        {session?.user && (
+                            <Button variant={isActive('/library') ? 'default' : 'ghost'} size='sm' asChild>
+                                <Link href='/library' className='gap-2' >
+                                    <Library className='w-4 h-4'/>
+                                    <span className='hidden sm:inline'>Library</span></Link>
+                            </Button>
+                        )}
 
                         {status === 'loading' ? (
                             <Button variant='outline' size='sm' disabled>
@@ -53,9 +55,11 @@ const Navbar = () => {
                             </Button>
                         ) : session?.user ? (
                             <div className='flex items-center gap-2'>
-                                <div className='flex h-8 w-8 items-center justify-center rounded-full border border-[#DAD3C8] bg-white text-sm font-semibold text-foreground'>
-                                    {userInitial}
-                                </div>
+                                <Link href='/my-profile' className='gap-2' >
+                                    <div className='flex h-8 w-8 items-center justify-center rounded-full border border-[#DAD3C8] bg-white text-sm font-semibold text-foreground'>
+                                        {userInitial}
+                                    </div>
+                                </Link>
                                 <Button
                                     variant='outline'
                                     size='sm'

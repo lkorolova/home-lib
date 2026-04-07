@@ -203,5 +203,4 @@ Use this before marking the deployment complete:
 
 ## Notes
 
-- The repo contains a secondary `clerk-nextjs` example app, but the main deployable app is the project root.
 - If you want a cleaner production setup later, the database configuration should be unified so the app uses one canonical Postgres connection variable.

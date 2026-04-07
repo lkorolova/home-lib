@@ -17,6 +17,8 @@ import { sql } from "drizzle-orm";
 export const user = pgTable("User", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   email: varchar("email", { length: 64 }).notNull(),
+  name: varchar("name", { length: 64 }),
+  surname: varchar("surname", { length: 64 }),
   password: varchar("password", { length: 64 }),
 });
 
@@ -191,3 +193,22 @@ export const book = pgTable(
 );
 
 export type Book = InferSelectModel<typeof book>;
+
+export const userLibrary = pgTable(
+  "UserLibrary",
+  {
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => user.id),
+    bookId: varchar("book_id", { length: 13 })
+      .notNull()
+      .references(() => book.id),
+    addedAt: timestamp("added_at").defaultNow().notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.userId, table.bookId] }),
+  })
+);
+
+export type UserLibrary = InferSelectModel<typeof userLibrary>;

@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  cacheComponents: true,
   experimental: {
     serverActions: {
-      bodySizeLimit: "6mb", // Set to your desired limit
+      bodySizeLimit: "6mb",
     },
   },
   images: {

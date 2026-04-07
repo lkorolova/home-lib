@@ -8,6 +8,27 @@
       "when": 1774310492358,
       "tag": "0000_perfect_cammi",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1775529600000,
+      "tag": "0001_add_book_library",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1775533200000,
+      "tag": "0002_user_library_added_at",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775536800000,
+      "tag": "0003_user_profile_fields",
+      "breakpoints": true
     }
   ]
 }
